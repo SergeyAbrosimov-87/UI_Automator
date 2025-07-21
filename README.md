@@ -1,9 +1,12 @@
 # Домашнее задание к занятию «2.2. UI Automator. Автоматизация тестирования Android»
-# Задание «UI Automator»
+
+Возьмите за основу [лекционный проект](https://github.com/netology-code/mqa-homeworks/tree/main/2.2%20UI%20Automator/sample) и дополните решениями заданий.
+
+## Задание «UI Automator»
+
 На лекции был реализован один тест на модельное приложение.
 
 Ваша задача — добавить ещё два теста:
-
 - тест на попытку установки пустой строки;
 - тест на открытие текста в новой Activity.
 
@@ -15,21 +18,22 @@
 
 Для определения ID у TextView, принадлежащего второй Activity, рекомендуем использовать инструмент UI Automator Viewer.
 
-# Задание «GitHub Actions»
+## Задание «GitHub Actions»
+
 После выполнения первой задачи добавьте полученный код в репозиторий на GitHub. Второй задачей будет настройка инструмента GitHub Actions для этого репозитория.
 
 Подробную инструкцию по настройке смотрите ниже.
 
 <details>
 <summary>Инструкция для GitHub Actions.</summary>
-  
-  В вашем репозитории перейдите на вкладку Actions и нажмите на кнопку «Set up this workflow».
-  
-  ![](pic/actions.png)
-  
-  Появится окно добавления скрипта GitHub Actions в репозиторий. Имя этого скрипта можете сделать любым, главное — это его расширение, `.yml`.
-  Содержимое файла замените скриптом:
-  
+
+В вашем репозитории перейдите на вкладку Actions и нажмите на кнопку «Set up this workflow».
+
+![](https://github.com/netology-code/mqa-homeworks/blob/main/2.2%20UI%20Automator/pic/actions.png)
+
+Появится окно добавления скрипта GitHub Actions в репозиторий. Имя этого скрипта можете сделать любым, главное — это его расширение, `.yml`.
+Содержимое файла замените скриптом:
+
 ```yaml
 name: Android CI
 
@@ -45,10 +49,10 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - name: set up JDK 11
+    - name: set up JDK 17
       uses: actions/setup-java@v3
       with:
-        java-version: '11'
+        java-version: '17'
         distribution: 'adopt'
         cache: gradle
 
@@ -59,13 +63,13 @@ jobs:
       run: ./gradlew build
       
   test:
-    runs-on: macos-latest
+    runs-on: macos-13
     steps:
     - uses: actions/checkout@v3
-    - name: set up JDK 11
+    - name: set up JDK 17
       uses: actions/setup-java@v3
       with:
-        java-version: '11'
+        java-version: '17'
         distribution: 'adopt'
         cache: gradle
 
@@ -78,13 +82,11 @@ jobs:
         api-level: 29
         script: ./gradlew connectedCheck
 ```
-  
+
 Скрипт сначала проверяет сборку вашего проекта через команду `./gradlew build`, а затем запускает виртуальную машину с macOS. На ней сначала запускается эмулятор Android, а затем выполняется запуск тестов UI Autimator. Это происходит с помощью специального плагина `android-emulator-runner`.
-  
+
 Теперь после каждого коммита в репозиторий будет автоматически запускаться скрипт GitHub Actions, который автоматически будет проверять сборку проекта и корректность выполнения тестов.
 </details>
 
 После настройки дождитесь результата запуска тестов и убедитесь, что запуск был успешным.
-
-
 

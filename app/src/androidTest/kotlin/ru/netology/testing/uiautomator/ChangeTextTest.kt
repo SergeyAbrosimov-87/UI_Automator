@@ -24,7 +24,6 @@ class ChangeTextTest {
 
     private lateinit var device: UiDevice
     private val textToSet = "Netology"
-    private val textEmpty = " "
 
 //    @Test
 //    fun testInternetSettings() {
@@ -111,36 +110,49 @@ class ChangeTextTest {
         assertEquals(result, textToSet)
     }
 
-
-
     @Test
-    fun testEmptyString() {
-        val packageName = MODEL_PACKAGE
-        waitForPackage(packageName)
+    fun testEmptyStringInput() {
+        val appPackageName = MODEL_PACKAGE
+        waitForPackage(appPackageName)
 
-        val initialText = device.findObject(By.res(packageName, "textToBeChanged")).text
-        device.findObject(By.res(packageName, "userInput")).text = textEmpty
-        device.findObject(By.res(packageName, "buttonChange")).click()
+        // Получаем текущее значение текста перед изменением
+        val initialText = device.findObject(By.res(appPackageName, "textToBeChanged")).text
 
-        val result = device.findObject(By.res(packageName, "textToBeChanged")).text
-        assertEquals(result, initialText)
+        // Очищаем ввод пользователя (устанавливаем пустую строку)
+        val userInputField = device.findObject(By.res(appPackageName, "userInput"))
+        userInputField.text = " " // Установим пробел, так как пустую строку не получится установить
+
+        // Нажимаем на кнопку изменения текста
+        val changeButton = device.findObject(By.res(appPackageName, "buttonChange"))
+        changeButton.click()
+
+        // Получаем значение текста после попытки изменения
+        val resultText = device.findObject(By.res(appPackageName, "textToBeChanged")).text
+
+        // Проверяем, что текст не изменился
+        assertEquals(resultText, initialText)
     }
 
     @Test
-    fun testNewActivity() {
-        val packageName = MODEL_PACKAGE
-        waitForPackage(packageName)
+    fun testOpenNewActivity() {
+        val appPackageName = MODEL_PACKAGE
+        waitForPackage(appPackageName)
 
-        device.findObject(By.res(packageName, "userInput")).text = textToSet
-        device.findObject(By.res(packageName, "buttonActivity")).click()
-        waitForPackage(packageName)
+        // Устанавливаем текст в поле ввода
+        val userInputField = device.findObject(By.res(appPackageName, "userInput"))
+        userInputField.text = textToSet
 
-        val result = device.findObject(By.res(packageName, "text")).text
-        assertEquals(result, textToSet)
+        // Нажимаем на кнопку для открытия новой активити
+        val openActivityButton = device.findObject(By.res(appPackageName, "buttonActivity"))
+        openActivityButton.click()
+
+        // Ждем загрузки новой активити
+        waitForPackage(appPackageName)
+
+        // Получаем текст из новой активити
+        val displayedText = device.findObject(By.res(appPackageName, "text")).text
+
+        // Проверяем, что текст соответствует введенному значению
+        assertEquals(displayedText, textToSet)
     }
-
-
 }
-
-
-
